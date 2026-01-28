@@ -197,6 +197,22 @@ The SDK currently supports **mono 16-bit PCM (s16le)** audio:
 - Bit Depth: 16-bit
 - Format: Raw PCM bytes as `Uint8Array`
 
+## Examples
+
+See the [examples](./examples) directory for complete working examples:
+
+- [single-audio-clip](./examples/single-audio-clip) - Basic usage with a single audio file
+- [connection-pool](./examples/connection-pool) - Efficient connection pooling for high-throughput scenarios
+- [http-service](./examples/http-service) - HTTP API that processes audio and returns animation data
+
+To run an example:
+
+```bash
+cd examples/single-audio-clip
+pnpm install
+pnpm start
+```
+
 ## License
 
 MIT

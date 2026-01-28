@@ -1,0 +1,16 @@
+{
+  "name": "http-service-example",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx main.ts"
+  },
+  "dependencies": {
+    "avatarkit-server": "workspace:*",
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "@types/node": "^22.10.7"
+  }
+}
