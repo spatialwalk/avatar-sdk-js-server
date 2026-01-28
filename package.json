@@ -1,0 +1,67 @@
+{
+  "name": "avatarkit-server",
+  "version": "0.1.0",
+  "description": "Server SDK for Avatar Services - WebSocket SDK for audio streaming and animation frame reception",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "proto:generate": "cd proto && buf generate",
+    "prepublishOnly": "pnpm run build"
+  },
+  "packageManager": "pnpm@9.15.4",
+  "keywords": [
+    "avatar",
+    "websocket",
+    "streaming",
+    "animation",
+    "livekit",
+    "real-time"
+  ],
+  "author": "SpatialWalk",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spatialwalk/avatar-sdk-js-server"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.47.2",
+    "@bufbuild/protoc-gen-es": "^2.2.3",
+    "@types/node": "^22.10.7",
+    "@types/ws": "^8.18.1",
+    "prettier": "^3.8.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.2.3",
+    "nanoid": "^5.0.9"
+  },
+  "optionalDependencies": {
+    "ws": "^8.19.0"
+  }
+}
