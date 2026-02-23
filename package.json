@@ -52,7 +52,7 @@
     "@bufbuild/buf": "^1.47.2",
     "@bufbuild/protoc-gen-es": "^2.2.3",
     "@eslint/js": "^10.0.1",
-    "@types/node": "^22.10.7",
+    "@types/node": "^24.0.0",
     "@types/ws": "^8.18.1",
     "eslint": "^10.0.1",
     "globals": "^17.3.0",
