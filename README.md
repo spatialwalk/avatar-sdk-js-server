@@ -2,7 +2,7 @@
 
 A TypeScript/JavaScript SDK for connecting to avatar services via WebSocket, supporting audio streaming and receiving animation frames.
 
-Supports Node.js, Bun, Deno, and Cloudflare Workers.
+Supports Node.js, Bun, Deno.
 
 ## Installation
 
@@ -26,7 +26,7 @@ const session = newAvatarSession({
   appId: "your-app-id",
   avatarId: "your-avatar-id",
   consoleEndpointUrl: "https://console.us-west.spatialwalk.cloud/v1/console",
-  ingressEndpointUrl: "https://api.us-west.spatialwalk.cloud/v2/driveningress",
+  ingressEndpointUrl: "wss://api.us-west.spatialwalk.cloud/v2/driveningress",
   expireAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes from now
   transportFrames: (frame, isLast) => {
     console.log(`Received frame: ${frame.length} bytes, last=${isLast}`);
@@ -61,7 +61,7 @@ const session = newAvatarSession({
   appId: "your-app-id",
   avatarId: "your-avatar-id",
   consoleEndpointUrl: "https://console.us-west.spatialwalk.cloud/v1/console",
-  ingressEndpointUrl: "https://api.us-west.spatialwalk.cloud/v2/driveningress",
+  ingressEndpointUrl: "wss://api.us-west.spatialwalk.cloud/v2/driveningress",
   expireAt: new Date(Date.now() + 5 * 60 * 1000),
   livekitEgress: {
     url: "wss://your-livekit-server.com",
@@ -172,26 +172,6 @@ Create a new avatar session with the provided options.
 - `close()` - Close the session
 - `getConfig()` - Get session configuration
 - `getConnectionId()` - Get connection ID
-
-### `SessionConfigBuilder`
-
-Fluent builder for creating session configuration:
-
-```typescript
-import { SessionConfigBuilder, AvatarSession } from "avatarkit-server";
-
-const config = new SessionConfigBuilder()
-  .withAvatarId("avatar-123")
-  .withApiKey("your-api-key")
-  .withAppId("your-app-id")
-  .withConsoleEndpointUrl("https://console.example.com")
-  .withIngressEndpointUrl("https://api.example.com")
-  .withExpireAt(new Date(Date.now() + 5 * 60 * 1000))
-  .withTransportFrames((frame, isLast) => console.log("Frame received"))
-  .build();
-
-const session = new AvatarSession(config);
-```
 
 ## Audio Format
 
