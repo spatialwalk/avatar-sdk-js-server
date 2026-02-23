@@ -31,6 +31,8 @@ message LiveKitEgressConfig {
   string api_secret = 3;
   string room_name = 4;
   string publisher_id = 5;
+  map<string, string> extra_attributes = 6;
+  int32 idle_timeout = 7;
 }
 
 message ClientConfigureSession {
