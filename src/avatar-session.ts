@@ -213,6 +213,8 @@ export class AvatarSession {
                 apiSecret: this.config.livekitEgress.apiSecret,
                 roomName: this.config.livekitEgress.roomName,
                 publisherId: this.config.livekitEgress.publisherId,
+                extraAttributes: this.config.livekitEgress.extraAttributes,
+                idleTimeout: this.config.livekitEgress.idleTimeout,
               }
             : undefined,
         },

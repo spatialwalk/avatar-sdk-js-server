@@ -12,6 +12,10 @@ export interface LiveKitEgressConfig {
   roomName: string;
   /** Publisher identity in the room */
   publisherId: string;
+  /** Extra participant attributes passed to LiveKit */
+  extraAttributes?: Record<string, string>;
+  /** Idle timeout in seconds. 0 or undefined means server default */
+  idleTimeout?: number;
 }
 
 /**

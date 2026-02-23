@@ -69,6 +69,8 @@ const session = newAvatarSession({
     apiSecret: "livekit-api-secret",
     roomName: "your-room-name",
     publisherId: "avatar-publisher",
+    extraAttributes: { role: "avatar", locale: "en-US" },
+    idleTimeout: 120,
   },
   onError: (err) => console.error("Error:", err),
   onClose: () => console.log("Session closed"),
@@ -79,6 +81,9 @@ When LiveKit egress is enabled:
 - The `transportFrames` callback will **not** be invoked
 - Audio and animation data are published directly to the specified LiveKit room
 - Your client must use the **avatarkit-livekit-adapter** to render the avatar
+
+`livekitEgress.extraAttributes` lets you pass participant attributes to LiveKit, and
+`livekitEgress.idleTimeout` sets idle timeout in seconds (0/undefined uses server defaults).
 
 ### Interrupt (LiveKit Egress Only)
 
