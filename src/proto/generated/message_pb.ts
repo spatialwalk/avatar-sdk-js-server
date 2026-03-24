@@ -9,11 +9,8 @@ import type { Message as Message$1 } from "@bufbuild/protobuf";
 /**
  * Describes the file message.proto.
  */
-export const file_message: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "Cg1tZXNzYWdlLnByb3RvEgdtZXNzYWdlIosCChNMaXZlS2l0RWdyZXNzQ29uZmlnEgsKA3VybBgBIAEoCRIPCgdhcGlfa2V5GAIgASgJEhIKCmFwaV9zZWNyZXQYAyABKAkSEQoJcm9vbV9uYW1lGAQgASgJEhQKDHB1Ymxpc2hlcl9pZBgFIAEoCRJLChBleHRyYV9hdHRyaWJ1dGVzGAYgAygLMjEubWVzc2FnZS5MaXZlS2l0RWdyZXNzQ29uZmlnLkV4dHJhQXR0cmlidXRlc0VudHJ5EhQKDGlkbGVfdGltZW91dBgHIAEoBRo2ChRFeHRyYUF0dHJpYnV0ZXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIogCChZDbGllbnRDb25maWd1cmVTZXNzaW9uEhMKC3NhbXBsZV9yYXRlGAEgASgFEg8KB2JpdHJhdGUYAiABKAUSKgoMYXVkaW9fZm9ybWF0GAMgASgOMhQubWVzc2FnZS5BdWRpb0Zvcm1hdBI8ChV0cmFuc3BvcnRfY29tcHJlc3Npb24YBCABKA4yHS5tZXNzYWdlLlRyYW5zcG9ydENvbXByZXNzaW9uEigKC2VncmVzc190eXBlGAUgASgOMhMubWVzc2FnZS5FZ3Jlc3NUeXBlEjQKDmxpdmVraXRfZWdyZXNzGAYgASgLMhwubWVzc2FnZS5MaXZlS2l0RWdyZXNzQ29uZmlnIi0KFFNlcnZlckNvbmZpcm1TZXNzaW9uEhUKDWNvbm5lY3Rpb25faWQYASABKAkiPgoQQ2xpZW50QXVkaW9JbnB1dBIOCgZyZXFfaWQYASABKAkSCwoDZW5kGAIgASgIEg0KBWF1ZGlvGAMgASgMIlMKC1NlcnZlckVycm9yEhUKDWNvbm5lY3Rpb25faWQYASABKAkSDgoGcmVxX2lkGAIgASgJEgwKBGNvZGUYAyABKAUSDwoHbWVzc2FnZRgEIAEoCSJNChdTZXJ2ZXJSZXNwb25zZUFuaW1hdGlvbhIVCg1jb25uZWN0aW9uX2lkGAEgASgJEg4KBnJlcV9pZBgCIAEoCRILCgNlbmQYAyABKAgiIQoPQ2xpZW50SW50ZXJydXB0Eg4KBnJlcV9pZBgBIAEoCSKfAwoHTWVzc2FnZRIiCgR0eXBlGAEgASgOMhQubWVzc2FnZS5NZXNzYWdlVHlwZRJDChhjbGllbnRfY29uZmlndXJlX3Nlc3Npb24YAiABKAsyHy5tZXNzYWdlLkNsaWVudENvbmZpZ3VyZVNlc3Npb25IABI/ChZzZXJ2ZXJfY29uZmlybV9zZXNzaW9uGAMgASgLMh0ubWVzc2FnZS5TZXJ2ZXJDb25maXJtU2Vzc2lvbkgAEjcKEmNsaWVudF9hdWRpb19pbnB1dBgEIAEoCzIZLm1lc3NhZ2UuQ2xpZW50QXVkaW9JbnB1dEgAEiwKDHNlcnZlcl9lcnJvchgFIAEoCzIULm1lc3NhZ2UuU2VydmVyRXJyb3JIABJFChlzZXJ2ZXJfcmVzcG9uc2VfYW5pbWF0aW9uGAYgASgLMiAubWVzc2FnZS5TZXJ2ZXJSZXNwb25zZUFuaW1hdGlvbkgAEjQKEGNsaWVudF9pbnRlcnJ1cHQYCCABKAsyGC5tZXNzYWdlLkNsaWVudEludGVycnVwdEgAQgYKBGRhdGEq7wEKC01lc3NhZ2VUeXBlEhcKE01FU1NBR0VfVU5TUEVDSUZJRUQQABIkCiBNRVNTQUdFX0NMSUVOVF9DT05GSUdVUkVfU0VTU0lPThABEiIKHk1FU1NBR0VfU0VSVkVSX0NPTkZJUk1fU0VTU0lPThACEh4KGk1FU1NBR0VfQ0xJRU5UX0FVRElPX0lOUFVUEAMSGAoUTUVTU0FHRV9TRVJWRVJfRVJST1IQBBIlCiFNRVNTQUdFX1NFUlZFUl9SRVNQT05TRV9BTklNQVRJT04QBRIcChhNRVNTQUdFX0NMSUVOVF9JTlRFUlJVUFQQByopCgtBdWRpb0Zvcm1hdBIaChZBVURJT19GT1JNQVRfUENNX1MxNkxFEAAqNgoUVHJhbnNwb3J0Q29tcHJlc3Npb24SHgoaVFJBTlNQT1JUX0NPTVBSRVNTSU9OX05PTkUQACpCCgpFZ3Jlc3NUeXBlEhsKF0VHUkVTU19UWVBFX1VOU1BFQ0lGSUVEEAASFwoTRUdSRVNTX1RZUEVfTElWRUtJVBABQlcKC2NvbS5tZXNzYWdlQgxNZXNzYWdlUHJvdG9QAaICA01YWKoCB01lc3NhZ2XKAgdNZXNzYWdl4gITTWVzc2FnZVxHUEJNZXRhZGF0YeoCB01lc3NhZ2ViBnByb3RvMw"
-  );
+export const file_message: GenFile = /*@__PURE__*/
+  fileDesc("Cg1tZXNzYWdlLnByb3RvEgdtZXNzYWdlIp4CChNMaXZlS2l0RWdyZXNzQ29uZmlnEgsKA3VybBgBIAEoCRIPCgdhcGlfa2V5GAIgASgJEhIKCmFwaV9zZWNyZXQYAyABKAkSEQoJcm9vbV9uYW1lGAQgASgJEhQKDHB1Ymxpc2hlcl9pZBgFIAEoCRJLChBleHRyYV9hdHRyaWJ1dGVzGAYgAygLMjEubWVzc2FnZS5MaXZlS2l0RWdyZXNzQ29uZmlnLkV4dHJhQXR0cmlidXRlc0VudHJ5EhQKDGlkbGVfdGltZW91dBgHIAEoBRIRCglhcGlfdG9rZW4YCCABKAkaNgoURXh0cmFBdHRyaWJ1dGVzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASKIAgoWQ2xpZW50Q29uZmlndXJlU2Vzc2lvbhITCgtzYW1wbGVfcmF0ZRgBIAEoBRIPCgdiaXRyYXRlGAIgASgFEioKDGF1ZGlvX2Zvcm1hdBgDIAEoDjIULm1lc3NhZ2UuQXVkaW9Gb3JtYXQSPAoVdHJhbnNwb3J0X2NvbXByZXNzaW9uGAQgASgOMh0ubWVzc2FnZS5UcmFuc3BvcnRDb21wcmVzc2lvbhIoCgtlZ3Jlc3NfdHlwZRgFIAEoDjITLm1lc3NhZ2UuRWdyZXNzVHlwZRI0Cg5saXZla2l0X2VncmVzcxgGIAEoCzIcLm1lc3NhZ2UuTGl2ZUtpdEVncmVzc0NvbmZpZyItChRTZXJ2ZXJDb25maXJtU2Vzc2lvbhIVCg1jb25uZWN0aW9uX2lkGAEgASgJIj4KEENsaWVudEF1ZGlvSW5wdXQSDgoGcmVxX2lkGAEgASgJEgsKA2VuZBgCIAEoCBINCgVhdWRpbxgDIAEoDCJTCgtTZXJ2ZXJFcnJvchIVCg1jb25uZWN0aW9uX2lkGAEgASgJEg4KBnJlcV9pZBgCIAEoCRIMCgRjb2RlGAMgASgFEg8KB21lc3NhZ2UYBCABKAkiTQoXU2VydmVyUmVzcG9uc2VBbmltYXRpb24SFQoNY29ubmVjdGlvbl9pZBgBIAEoCRIOCgZyZXFfaWQYAiABKAkSCwoDZW5kGAMgASgIIiEKD0NsaWVudEludGVycnVwdBIOCgZyZXFfaWQYASABKAkinwMKB01lc3NhZ2USIgoEdHlwZRgBIAEoDjIULm1lc3NhZ2UuTWVzc2FnZVR5cGUSQwoYY2xpZW50X2NvbmZpZ3VyZV9zZXNzaW9uGAIgASgLMh8ubWVzc2FnZS5DbGllbnRDb25maWd1cmVTZXNzaW9uSAASPwoWc2VydmVyX2NvbmZpcm1fc2Vzc2lvbhgDIAEoCzIdLm1lc3NhZ2UuU2VydmVyQ29uZmlybVNlc3Npb25IABI3ChJjbGllbnRfYXVkaW9faW5wdXQYBCABKAsyGS5tZXNzYWdlLkNsaWVudEF1ZGlvSW5wdXRIABIsCgxzZXJ2ZXJfZXJyb3IYBSABKAsyFC5tZXNzYWdlLlNlcnZlckVycm9ySAASRQoZc2VydmVyX3Jlc3BvbnNlX2FuaW1hdGlvbhgGIAEoCzIgLm1lc3NhZ2UuU2VydmVyUmVzcG9uc2VBbmltYXRpb25IABI0ChBjbGllbnRfaW50ZXJydXB0GAggASgLMhgubWVzc2FnZS5DbGllbnRJbnRlcnJ1cHRIAEIGCgRkYXRhKu8BCgtNZXNzYWdlVHlwZRIXChNNRVNTQUdFX1VOU1BFQ0lGSUVEEAASJAogTUVTU0FHRV9DTElFTlRfQ09ORklHVVJFX1NFU1NJT04QARIiCh5NRVNTQUdFX1NFUlZFUl9DT05GSVJNX1NFU1NJT04QAhIeChpNRVNTQUdFX0NMSUVOVF9BVURJT19JTlBVVBADEhgKFE1FU1NBR0VfU0VSVkVSX0VSUk9SEAQSJQohTUVTU0FHRV9TRVJWRVJfUkVTUE9OU0VfQU5JTUFUSU9OEAUSHAoYTUVTU0FHRV9DTElFTlRfSU5URVJSVVBUEAcqRAoLQXVkaW9Gb3JtYXQSGgoWQVVESU9fRk9STUFUX1BDTV9TMTZMRRAAEhkKFUFVRElPX0ZPUk1BVF9PR0dfT1BVUxABKjYKFFRyYW5zcG9ydENvbXByZXNzaW9uEh4KGlRSQU5TUE9SVF9DT01QUkVTU0lPTl9OT05FEAAqQgoKRWdyZXNzVHlwZRIbChdFR1JFU1NfVFlQRV9VTlNQRUNJRklFRBAAEhcKE0VHUkVTU19UWVBFX0xJVkVLSVQQAUJXCgtjb20ubWVzc2FnZUIMTWVzc2FnZVByb3RvUAGiAgNNWFiqAgdNZXNzYWdlygIHTWVzc2FnZeICE01lc3NhZ2VcR1BCTWV0YWRhdGHqAgdNZXNzYWdlYgZwcm90bzM");
 
 /**
  * @generated from message message.LiveKitEgressConfig
@@ -53,14 +50,18 @@ export type LiveKitEgressConfig = Message$1<"message.LiveKitEgressConfig"> & {
    * @generated from field: int32 idle_timeout = 7;
    */
   idleTimeout: number;
+
+  /**
+   * @generated from field: string api_token = 8;
+   */
+  apiToken: string;
 };
 
 /**
  * Describes the message message.LiveKitEgressConfig.
  * Use `create(LiveKitEgressConfigSchema)` to create a new message.
  */
-export const LiveKitEgressConfigSchema: GenMessage<LiveKitEgressConfig> =
-  /*@__PURE__*/
+export const LiveKitEgressConfigSchema: GenMessage<LiveKitEgressConfig> = /*@__PURE__*/
   messageDesc(file_message, 0);
 
 /**
@@ -102,8 +103,7 @@ export type ClientConfigureSession = Message$1<"message.ClientConfigureSession">
  * Describes the message message.ClientConfigureSession.
  * Use `create(ClientConfigureSessionSchema)` to create a new message.
  */
-export const ClientConfigureSessionSchema: GenMessage<ClientConfigureSession> =
-  /*@__PURE__*/
+export const ClientConfigureSessionSchema: GenMessage<ClientConfigureSession> = /*@__PURE__*/
   messageDesc(file_message, 1);
 
 /**
@@ -120,8 +120,7 @@ export type ServerConfirmSession = Message$1<"message.ServerConfirmSession"> & {
  * Describes the message message.ServerConfirmSession.
  * Use `create(ServerConfirmSessionSchema)` to create a new message.
  */
-export const ServerConfirmSessionSchema: GenMessage<ServerConfirmSession> =
-  /*@__PURE__*/
+export const ServerConfirmSessionSchema: GenMessage<ServerConfirmSession> = /*@__PURE__*/
   messageDesc(file_message, 2);
 
 /**
@@ -148,8 +147,7 @@ export type ClientAudioInput = Message$1<"message.ClientAudioInput"> & {
  * Describes the message message.ClientAudioInput.
  * Use `create(ClientAudioInputSchema)` to create a new message.
  */
-export const ClientAudioInputSchema: GenMessage<ClientAudioInput> =
-  /*@__PURE__*/
+export const ClientAudioInputSchema: GenMessage<ClientAudioInput> = /*@__PURE__*/
   messageDesc(file_message, 3);
 
 /**
@@ -181,8 +179,7 @@ export type ServerError = Message$1<"message.ServerError"> & {
  * Describes the message message.ServerError.
  * Use `create(ServerErrorSchema)` to create a new message.
  */
-export const ServerErrorSchema: GenMessage<ServerError> =
-  /*@__PURE__*/
+export const ServerErrorSchema: GenMessage<ServerError> = /*@__PURE__*/
   messageDesc(file_message, 4);
 
 /**
@@ -209,8 +206,7 @@ export type ServerResponseAnimation = Message$1<"message.ServerResponseAnimation
  * Describes the message message.ServerResponseAnimation.
  * Use `create(ServerResponseAnimationSchema)` to create a new message.
  */
-export const ServerResponseAnimationSchema: GenMessage<ServerResponseAnimation> =
-  /*@__PURE__*/
+export const ServerResponseAnimationSchema: GenMessage<ServerResponseAnimation> = /*@__PURE__*/
   messageDesc(file_message, 5);
 
 /**
@@ -227,8 +223,7 @@ export type ClientInterrupt = Message$1<"message.ClientInterrupt"> & {
  * Describes the message message.ClientInterrupt.
  * Use `create(ClientInterruptSchema)` to create a new message.
  */
-export const ClientInterruptSchema: GenMessage<ClientInterrupt> =
-  /*@__PURE__*/
+export const ClientInterruptSchema: GenMessage<ClientInterrupt> = /*@__PURE__*/
   messageDesc(file_message, 6);
 
 /**
@@ -243,57 +238,51 @@ export type Message = Message$1<"message.Message"> & {
   /**
    * @generated from oneof message.Message.data
    */
-  data:
-    | {
-        /**
-         * @generated from field: message.ClientConfigureSession client_configure_session = 2;
-         */
-        value: ClientConfigureSession;
-        case: "clientConfigureSession";
-      }
-    | {
-        /**
-         * @generated from field: message.ServerConfirmSession server_confirm_session = 3;
-         */
-        value: ServerConfirmSession;
-        case: "serverConfirmSession";
-      }
-    | {
-        /**
-         * @generated from field: message.ClientAudioInput client_audio_input = 4;
-         */
-        value: ClientAudioInput;
-        case: "clientAudioInput";
-      }
-    | {
-        /**
-         * @generated from field: message.ServerError server_error = 5;
-         */
-        value: ServerError;
-        case: "serverError";
-      }
-    | {
-        /**
-         * @generated from field: message.ServerResponseAnimation server_response_animation = 6;
-         */
-        value: ServerResponseAnimation;
-        case: "serverResponseAnimation";
-      }
-    | {
-        /**
-         * @generated from field: message.ClientInterrupt client_interrupt = 8;
-         */
-        value: ClientInterrupt;
-        case: "clientInterrupt";
-      }
-    | { case: undefined; value?: undefined };
+  data: {
+    /**
+     * @generated from field: message.ClientConfigureSession client_configure_session = 2;
+     */
+    value: ClientConfigureSession;
+    case: "clientConfigureSession";
+  } | {
+    /**
+     * @generated from field: message.ServerConfirmSession server_confirm_session = 3;
+     */
+    value: ServerConfirmSession;
+    case: "serverConfirmSession";
+  } | {
+    /**
+     * @generated from field: message.ClientAudioInput client_audio_input = 4;
+     */
+    value: ClientAudioInput;
+    case: "clientAudioInput";
+  } | {
+    /**
+     * @generated from field: message.ServerError server_error = 5;
+     */
+    value: ServerError;
+    case: "serverError";
+  } | {
+    /**
+     * @generated from field: message.ServerResponseAnimation server_response_animation = 6;
+     */
+    value: ServerResponseAnimation;
+    case: "serverResponseAnimation";
+  } | {
+    /**
+     * @generated from field: message.ClientInterrupt client_interrupt = 8;
+     */
+    value: ClientInterrupt;
+    case: "clientInterrupt";
+  } | { case: undefined; value?: undefined };
 };
 
 /**
  * Describes the message message.Message.
  * Use `create(MessageSchema)` to create a new message.
  */
-export const MessageSchema: GenMessage<Message> = /*@__PURE__*/ messageDesc(file_message, 7);
+export const MessageSchema: GenMessage<Message> = /*@__PURE__*/
+  messageDesc(file_message, 7);
 
 /**
  * @generated from enum message.MessageType
@@ -338,7 +327,8 @@ export enum MessageType {
 /**
  * Describes the enum message.MessageType.
  */
-export const MessageTypeSchema: GenEnum<MessageType> = /*@__PURE__*/ enumDesc(file_message, 0);
+export const MessageTypeSchema: GenEnum<MessageType> = /*@__PURE__*/
+  enumDesc(file_message, 0);
 
 /**
  * @generated from enum message.AudioFormat
@@ -348,12 +338,18 @@ export enum AudioFormat {
    * @generated from enum value: AUDIO_FORMAT_PCM_S16LE = 0;
    */
   PCM_S16LE = 0,
+
+  /**
+   * @generated from enum value: AUDIO_FORMAT_OGG_OPUS = 1;
+   */
+  OGG_OPUS = 1,
 }
 
 /**
  * Describes the enum message.AudioFormat.
  */
-export const AudioFormatSchema: GenEnum<AudioFormat> = /*@__PURE__*/ enumDesc(file_message, 1);
+export const AudioFormatSchema: GenEnum<AudioFormat> = /*@__PURE__*/
+  enumDesc(file_message, 1);
 
 /**
  * @generated from enum message.TransportCompression
@@ -368,8 +364,7 @@ export enum TransportCompression {
 /**
  * Describes the enum message.TransportCompression.
  */
-export const TransportCompressionSchema: GenEnum<TransportCompression> =
-  /*@__PURE__*/
+export const TransportCompressionSchema: GenEnum<TransportCompression> = /*@__PURE__*/
   enumDesc(file_message, 2);
 
 /**
@@ -390,4 +385,6 @@ export enum EgressType {
 /**
  * Describes the enum message.EgressType.
  */
-export const EgressTypeSchema: GenEnum<EgressType> = /*@__PURE__*/ enumDesc(file_message, 3);
+export const EgressTypeSchema: GenEnum<EgressType> = /*@__PURE__*/
+  enumDesc(file_message, 3);
+

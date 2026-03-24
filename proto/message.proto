@@ -14,6 +14,7 @@ enum MessageType {
 
 enum AudioFormat {
   AUDIO_FORMAT_PCM_S16LE = 0;
+  AUDIO_FORMAT_OGG_OPUS = 1;
 }
 
 enum TransportCompression {
@@ -33,6 +34,7 @@ message LiveKitEgressConfig {
   string publisher_id = 5;
   map<string, string> extra_attributes = 6;
   int32 idle_timeout = 7;
+  string api_token = 8;
 }
 
 message ClientConfigureSession {
