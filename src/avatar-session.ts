@@ -505,11 +505,9 @@ export class AvatarSession {
       envelope = fromBinary(MessageSchema, payload);
     } catch (e) {
       this.notifyError(
-        new AvatarSDKError(
-          AvatarSDKErrorCode.ProtocolError,
-          `Failed to decode message: ${e}`,
-          { phase: "websocket_runtime" }
-        )
+        new AvatarSDKError(AvatarSDKErrorCode.ProtocolError, `Failed to decode message: ${e}`, {
+          phase: "websocket_runtime",
+        })
       );
       return;
     }
@@ -737,10 +735,7 @@ export class AvatarSession {
     if (detailText.includes("invalid session token") || detailText.includes("empty token")) {
       return AvatarSDKErrorCode.SessionTokenInvalid;
     }
-    if (
-      detailText.includes("token is expired") ||
-      detailText.includes("session token expired")
-    ) {
+    if (detailText.includes("token is expired") || detailText.includes("session token expired")) {
       return AvatarSDKErrorCode.SessionTokenExpired;
     }
     if (detailText.includes("app id mismatch")) {
@@ -793,7 +788,11 @@ export class AvatarSession {
       return AvatarSDKErrorCode.ProtocolError;
     }
 
-    const httpMapped = this.mapHttpStatusToErrorCode(input.httpStatus ?? null, input.phase, detailText);
+    const httpMapped = this.mapHttpStatusToErrorCode(
+      input.httpStatus ?? null,
+      input.phase,
+      detailText
+    );
     if (httpMapped !== AvatarSDKErrorCode.Unknown) {
       return httpMapped;
     }
@@ -860,8 +859,7 @@ export class AvatarSession {
     const value =
       (error as { statusCode?: unknown })?.statusCode ??
       (error as { status?: unknown })?.status ??
-      (error as { response?: { statusCode?: unknown; status?: unknown } })?.response
-        ?.statusCode ??
+      (error as { response?: { statusCode?: unknown; status?: unknown } })?.response?.statusCode ??
       (error as { response?: { statusCode?: unknown; status?: unknown } })?.response?.status;
     return this.coerceInt(value);
   }
@@ -940,10 +938,7 @@ export class AvatarSession {
     });
   }
 
-  private buildConnectionClosedMessage(
-    closeCode: number | null,
-    closeReason?: string
-  ): string {
+  private buildConnectionClosedMessage(closeCode: number | null, closeReason?: string): string {
     let message = "WebSocket connection closed unexpectedly";
     if (closeCode !== null && closeReason) {
       message += ` (code ${closeCode}: ${closeReason})`;

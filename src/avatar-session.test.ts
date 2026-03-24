@@ -156,23 +156,24 @@ function setSessionToken(session: ReturnType<typeof newAvatarSession>, token: st
 
 describe("AvatarSession v2", () => {
   it("init surfaces structured session token errors", async () => {
-    const fetchFn = vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          errors: [
-            {
-              status: 400,
-              code: "INVALID_ARGUMENT",
-              title: "Invalid Argument",
-              detail: "expire_at must be in the future",
-            },
-          ],
-        }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      )
+    const fetchFn = vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            errors: [
+              {
+                status: 400,
+                code: "INVALID_ARGUMENT",
+                title: "Invalid Argument",
+                detail: "expire_at must be in the future",
+              },
+            ],
+          }),
+          {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          }
+        )
     );
 
     const failingSession = newAvatarSession({
