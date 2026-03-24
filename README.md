@@ -92,12 +92,39 @@ const session = newAvatarSession({
 
 ## Audio Format
 
-The SDK currently supports **mono 16-bit PCM (s16le)** audio:
+The SDK supports these session input formats:
 
-- Sample Rate: 8000, 16000, 22050, 24000, 32000, 44100, or 48000 Hz
-- Channels: 1 (mono)
-- Bit Depth: 16-bit
-- Format: Raw PCM bytes as `Uint8Array`
+- `AudioFormat.PCM_S16LE`: mono 16-bit PCM (`Uint8Array`) at 8000, 16000, 22050, 24000, 32000, 44100, or 48000 Hz
+- `AudioFormat.OGG_OPUS`: pre-encoded Ogg Opus bytes, sent as one continuous logical stream per request ID
+
+```typescript
+import { AudioFormat, newAvatarSession } from "avatarkit-server";
+
+const session = newAvatarSession({
+  // ...other config
+  audioFormat: AudioFormat.OGG_OPUS,
+});
+```
+
+## LiveKit Egress
+
+When using LiveKit egress, prefer `apiToken`. Legacy `apiKey` and `apiSecret` remain supported for compatibility.
+
+```typescript
+const session = newAvatarSession({
+  // ...other config
+  livekitEgress: {
+    url: "wss://livekit.example.com",
+    apiToken: "your-livekit-access-token",
+    roomName: "avatar-room",
+    publisherId: "avatar-publisher",
+  },
+});
+```
+
+## Error Handling
+
+`onError` and rejected promises now surface `AvatarSDKError` with stable error codes and structured fields such as `phase`, `httpStatus`, `serverCode`, `serverDetail`, `connectionId`, and `reqId`.
 
 ## Examples
 

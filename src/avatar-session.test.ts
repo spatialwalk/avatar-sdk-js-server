@@ -1,7 +1,14 @@
 import { create, fromBinary, toBinary } from "@bufbuild/protobuf";
 import { describe, expect, it, vi } from "vitest";
 import { newAvatarSession } from "./avatar-session.js";
-import { EgressType, MessageSchema, MessageType } from "./proto/generated/message_pb.js";
+import { AudioFormat } from "./session-config.js";
+import { AvatarSDKError, AvatarSDKErrorCode } from "./errors.js";
+import {
+  EgressType,
+  MessageSchema,
+  MessageType,
+  AudioFormat as ProtoAudioFormat,
+} from "./proto/generated/message_pb.js";
 import { WebSocketLike, WebSocketReadyState } from "./websocket.js";
 
 class FakeWebSocket implements WebSocketLike {
@@ -90,6 +97,11 @@ class FakeWebSocket implements WebSocketLike {
   }
 }
 
+type AvatarSessionInternals = {
+  sessionToken: string | null;
+  handleBinaryMessage(payload: Uint8Array): void;
+};
+
 function makeConfirmMessage(connectionId: string): Uint8Array {
   return toBinary(
     MessageSchema,
@@ -139,10 +151,66 @@ function makeAnimationMessage(isLast: boolean): Uint8Array {
 }
 
 function setSessionToken(session: ReturnType<typeof newAvatarSession>, token: string): void {
-  (session as unknown as { sessionToken: string | null }).sessionToken = token;
+  (session as unknown as AvatarSessionInternals).sessionToken = token;
 }
 
 describe("AvatarSession v2", () => {
+  it("init surfaces structured session token errors", async () => {
+    const fetchFn = vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            errors: [
+              {
+                status: 400,
+                code: "INVALID_ARGUMENT",
+                title: "Invalid Argument",
+                detail: "expire_at must be in the future",
+              },
+            ],
+          }),
+          {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+    );
+
+    const failingSession = newAvatarSession({
+      consoleEndpointUrl: "https://console.example.com",
+      apiKey: "api",
+      expireAt: new Date("2026-03-24T00:00:00Z"),
+      fetch: fetchFn as typeof fetch,
+    });
+
+    await expect(failingSession.init()).rejects.toMatchObject({
+      name: "SessionTokenError",
+      code: AvatarSDKErrorCode.InvalidRequest,
+      phase: "session_token",
+      httpStatus: 400,
+      serverCode: "INVALID_ARGUMENT",
+      serverTitle: "Invalid Argument",
+      serverDetail: "expire_at must be in the future",
+    });
+  });
+
+  it("init wraps transport errors as session token errors", async () => {
+    const session = newAvatarSession({
+      consoleEndpointUrl: "https://console.example.com",
+      apiKey: "api",
+      expireAt: new Date("2026-03-24T00:00:00Z"),
+      fetch: vi.fn(async () => {
+        throw new Error("network down");
+      }) as typeof fetch,
+    });
+
+    await expect(session.init()).rejects.toMatchObject({
+      name: "SessionTokenError",
+      code: AvatarSDKErrorCode.ConnectionFailed,
+      phase: "session_token",
+    });
+  });
+
   it("start with header auth builds URL/headers and handshakes", async () => {
     const ws = new FakeWebSocket();
     const captured: { url: string; headers: Record<string, string> } = {
@@ -180,12 +248,12 @@ describe("AvatarSession v2", () => {
       "X-Session-Key": "tok-1",
     });
 
-    expect(ws.sent.length).toBeGreaterThanOrEqual(1);
     const first = fromBinary(MessageSchema, ws.sent[0]);
     expect(first.type).toBe(MessageType.MESSAGE_CLIENT_CONFIGURE_SESSION);
     expect(first.data.case).toBe("clientConfigureSession");
     if (first.data.case === "clientConfigureSession") {
       expect(first.data.value.sampleRate).toBe(16000);
+      expect(first.data.value.audioFormat).toBe(ProtoAudioFormat.PCM_S16LE);
     }
 
     await session.close();
@@ -227,7 +295,7 @@ describe("AvatarSession v2", () => {
     await session.close();
   });
 
-  it("start with livekit egress sends livekit fields", async () => {
+  it("start with livekit egress sends api token and existing egress fields", async () => {
     const ws = new FakeWebSocket();
     const wsFactory = vi.fn(async () => {
       setTimeout(() => ws.emitMessage(makeConfirmMessage("server-conn")), 0);
@@ -244,6 +312,7 @@ describe("AvatarSession v2", () => {
         url: "wss://livekit.example.com",
         apiKey: "lk-api-key",
         apiSecret: "lk-api-secret",
+        apiToken: "lk-token",
         roomName: "lk-room",
         publisherId: "publisher-1",
         extraAttributes: {
@@ -258,17 +327,84 @@ describe("AvatarSession v2", () => {
 
     await session.start();
 
-    expect(ws.sent.length).toBeGreaterThanOrEqual(1);
     const first = fromBinary(MessageSchema, ws.sent[0]);
     expect(first.type).toBe(MessageType.MESSAGE_CLIENT_CONFIGURE_SESSION);
     expect(first.data.case).toBe("clientConfigureSession");
     if (first.data.case === "clientConfigureSession") {
       expect(first.data.value.egressType).toBe(EgressType.LIVEKIT);
+      expect(first.data.value.livekitEgress?.apiToken).toBe("lk-token");
       expect(first.data.value.livekitEgress?.extraAttributes).toEqual({
         role: "avatar",
         region: "us-west",
       });
       expect(first.data.value.livekitEgress?.idleTimeout).toBe(120);
+    }
+
+    await session.close();
+  });
+
+  it("start with ogg opus sends negotiated audio format", async () => {
+    const ws = new FakeWebSocket();
+    const wsFactory = vi.fn(async () => {
+      setTimeout(() => ws.emitMessage(makeConfirmMessage("server-conn")), 0);
+      return ws;
+    });
+
+    const session = newAvatarSession({
+      ingressEndpointUrl: "https://ingress.example.com",
+      consoleEndpointUrl: "https://console.example.com",
+      apiKey: "api",
+      avatarId: "avatar-1",
+      appId: "app-1",
+      sampleRate: 24000,
+      bitrate: 32000,
+      audioFormat: AudioFormat.OGG_OPUS,
+      webSocketFactory: wsFactory,
+    });
+    setSessionToken(session, "tok-1");
+
+    await session.start();
+
+    const first = fromBinary(MessageSchema, ws.sent[0]);
+    expect(first.data.case).toBe("clientConfigureSession");
+    if (first.data.case === "clientConfigureSession") {
+      expect(first.data.value.sampleRate).toBe(24000);
+      expect(first.data.value.bitrate).toBe(32000);
+      expect(first.data.value.audioFormat).toBe(ProtoAudioFormat.OGG_OPUS);
+    }
+
+    await session.close();
+  });
+
+  it("sendAudio preserves pre-encoded ogg opus payloads", async () => {
+    const ws = new FakeWebSocket();
+    const wsFactory = vi.fn(async () => {
+      setTimeout(() => ws.emitMessage(makeConfirmMessage("server-conn")), 0);
+      return ws;
+    });
+
+    const session = newAvatarSession({
+      ingressEndpointUrl: "https://ingress.example.com",
+      consoleEndpointUrl: "https://console.example.com",
+      apiKey: "api",
+      avatarId: "avatar-1",
+      appId: "app-1",
+      audioFormat: AudioFormat.OGG_OPUS,
+      webSocketFactory: wsFactory,
+    });
+    setSessionToken(session, "tok-1");
+
+    await session.start();
+
+    const payload = new Uint8Array([79, 103, 103, 83, 1, 2, 3]);
+    const reqId = await session.sendAudio(payload, true);
+    const second = fromBinary(MessageSchema, ws.sent[1]);
+
+    expect(second.data.case).toBe("clientAudioInput");
+    if (second.data.case === "clientAudioInput") {
+      expect(second.data.value.reqId).toBe(reqId);
+      expect(second.data.value.audio).toEqual(payload);
+      expect(second.data.value.end).toBe(true);
     }
 
     await session.close();
@@ -289,19 +425,71 @@ describe("AvatarSession v2", () => {
     });
 
     const payload = makeAnimationMessage(true);
-    (
-      session as unknown as { handleBinaryMessage: (payload: Uint8Array) => void }
-    ).handleBinaryMessage(payload);
+    (session as unknown as AvatarSessionInternals).handleBinaryMessage(payload);
 
     expect(got).toHaveLength(1);
     expect(got[0].isLast).toBe(true);
     expect(got[0].data).toEqual(payload);
   });
 
-  it("start throws on server error during handshake", async () => {
+  it("start maps websocket HTTP rejection to structured sdk error", async () => {
+    const session = newAvatarSession({
+      ingressEndpointUrl: "https://ingress.example.com",
+      consoleEndpointUrl: "https://console.example.com",
+      apiKey: "api",
+      avatarId: "avatar-1",
+      appId: "app-1",
+      webSocketFactory: vi.fn(async () => {
+        throw {
+          status: 400,
+          body: '{"message":"Invalid session token"}\n',
+        };
+      }),
+    });
+    setSessionToken(session, "tok-1");
+
+    await expect(session.start()).rejects.toMatchObject({
+      code: AvatarSDKErrorCode.SessionTokenInvalid,
+      phase: "websocket_connect",
+      httpStatus: 400,
+      serverDetail: "Invalid session token",
+      rawBody: '{"message":"Invalid session token"}\n',
+    });
+  });
+
+  it("start maps avatar not found rejection from websocket connect", async () => {
+    const session = newAvatarSession({
+      ingressEndpointUrl: "https://ingress.example.com",
+      consoleEndpointUrl: "https://console.example.com",
+      apiKey: "api",
+      avatarId: "avatar-1",
+      appId: "app-1",
+      webSocketFactory: vi.fn(async () => {
+        throw {
+          statusCode: 404,
+          response: {
+            body: '{"message":"Avatar not found: avatar-1"}\n',
+          },
+        };
+      }),
+    });
+    setSessionToken(session, "tok-1");
+
+    await expect(session.start()).rejects.toMatchObject({
+      code: AvatarSDKErrorCode.AvatarNotFound,
+      phase: "websocket_connect",
+      httpStatus: 404,
+      serverDetail: "Avatar not found: avatar-1",
+    });
+  });
+
+  it("start throws structured error on server error during handshake", async () => {
     const ws = new FakeWebSocket();
     const wsFactory = vi.fn(async () => {
-      setTimeout(() => ws.emitMessage(makeServerErrorMessage(400, "bad params")), 0);
+      setTimeout(
+        () => ws.emitMessage(makeServerErrorMessage(0, "unsupported sample rate: 12345")),
+        0
+      );
       return ws;
     });
 
@@ -315,7 +503,40 @@ describe("AvatarSession v2", () => {
     });
     setSessionToken(session, "tok-1");
 
-    await expect(session.start()).rejects.toThrow("ServerError during handshake");
-    await session.close();
+    await expect(session.start()).rejects.toMatchObject({
+      code: AvatarSDKErrorCode.UnsupportedSampleRate,
+      phase: "websocket_handshake",
+      serverCode: "0",
+      serverDetail: "unsupported sample rate: 12345",
+    });
+  });
+
+  it("runtime server errors reach onError as AvatarSDKError", () => {
+    const got: Error[] = [];
+    const session = newAvatarSession({
+      ingressEndpointUrl: "https://ingress.example.com",
+      consoleEndpointUrl: "https://console.example.com",
+      apiKey: "api",
+      avatarId: "avatar-1",
+      appId: "app-1",
+      onError: (error) => {
+        got.push(error);
+      },
+    });
+
+    (session as unknown as AvatarSessionInternals).handleBinaryMessage(
+      makeServerErrorMessage(4001, "Credits exhausted")
+    );
+
+    expect(got).toHaveLength(1);
+    expect(got[0]).toBeInstanceOf(AvatarSDKError);
+    expect(got[0]).toMatchObject({
+      code: AvatarSDKErrorCode.CreditsExhausted,
+      phase: "websocket_runtime",
+      serverCode: "4001",
+      serverDetail: "Credits exhausted",
+      connectionId: "cid",
+      reqId: "rid",
+    });
   });
 });

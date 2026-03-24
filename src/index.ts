@@ -19,6 +19,7 @@ export type {
   ErrorCallback,
   CloseCallback,
 } from "./session-config.js";
+export { AudioFormat } from "./session-config.js";
 
 export { AvatarSDKError, AvatarSDKErrorCode, SessionTokenError } from "./errors.js";
 

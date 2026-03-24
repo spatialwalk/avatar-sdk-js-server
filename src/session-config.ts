@@ -1,3 +1,8 @@
+export enum AudioFormat {
+  PCM_S16LE = "pcm_s16le",
+  OGG_OPUS = "ogg_opus",
+}
+
 /**
  * Configuration for streaming to a LiveKit room.
  */
@@ -8,6 +13,8 @@ export interface LiveKitEgressConfig {
   apiKey: string;
   /** LiveKit API secret */
   apiSecret: string;
+  /** Pre-generated LiveKit access token. Preferred over apiKey/apiSecret */
+  apiToken?: string;
   /** LiveKit room name to join */
   roomName: string;
   /** Publisher identity in the room */
@@ -54,6 +61,8 @@ export interface SessionConfig {
   sampleRate: number;
   /** Audio bitrate (default: 0) */
   bitrate: number;
+  /** Audio input encoding negotiated with the server */
+  audioFormat: AudioFormat;
   /** Callback for receiving animation frames */
   transportFrames: TransportFramesCallback | null;
   /** Callback for error handling */
@@ -80,6 +89,7 @@ export class SessionConfigBuilder {
     expireAt: new Date(),
     sampleRate: 16000,
     bitrate: 0,
+    audioFormat: AudioFormat.PCM_S16LE,
     transportFrames: null,
     onError: null,
     onClose: null,
@@ -120,6 +130,11 @@ export class SessionConfigBuilder {
 
   withBitrate(bitrate: number): this {
     this.config.bitrate = bitrate;
+    return this;
+  }
+
+  withAudioFormat(audioFormat: AudioFormat): this {
+    this.config.audioFormat = audioFormat;
     return this;
   }
 
